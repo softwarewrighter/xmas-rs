@@ -1,0 +1,144 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: rgb(25, 21, 26);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+.utilities {
+  width: 100vw;
+  padding: 1rem;
+  color: white;
+  font-family: 'Lato', sans-serif;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.main {
+  width: 100%;
+  height: 100px;
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+.circle.red {
+  background: #ff0000;
+  box-shadow: 0 0 20px #ff0000;
+  animation-delay: 0s;
+}
+
+.circle.yellow {
+  background: #ffff00;
+  box-shadow: 0 0 20px #ffff00;
+  animation-delay: 0.25s;
+}
+
+.circle.blue {
+  background: #0000ff;
+  box-shadow: 0 0 20px #0000ff;
+  animation-delay: 0.5s;
+}
+
+.circle.green {
+  background: #00ff00;
+  box-shadow: 0 0 20px #00ff00;
+  animation-delay: 0.75s;
+}
+
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50%, 100% {
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+}
+
+.title {
+  text-align: center;
+}
+
+.title h1 {
+  font-size: 3rem;
+  margin: 0;
+  animation: titleBlink 2s infinite;
+}
+
+@keyframes titleBlink {
+  0%, 50% {
+    color: #fff;
+  }
+  51%, 100% {
+    color: #ff0000;
+  }
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+button, input[type="submit"] {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background: #563260;
+  color: white;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button:hover, input[type="submit"]:hover {
+  background: #fff;
+  color: #563260;
+}
+
+input[type="number"] {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  background: #563260;
+  color: white;
+  width: 200px;
+}
+
+label {
+  font-size: 1.2rem;
+}
+
+.paused {
+  animation-play-state: paused !important;
+  background: #563260 !important;
+  box-shadow: none !important;
+}
