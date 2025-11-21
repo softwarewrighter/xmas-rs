@@ -198,3 +198,87 @@ select option {
   animation-play-state: paused !important;
   opacity: 0.3 !important;
 }
+
+.footer {
+  width: 100%;
+  padding: 1.5rem 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  order: 3;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.copyright {
+  text-align: center;
+}
+
+.copyright a {
+  color: #ffdd00;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.copyright a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.build-info {
+  text-align: center;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: monospace;
+}
+
+.build-info span {
+  cursor: help;
+}
+
+.github-corner {
+  position: fixed;
+  top: 0;
+  right: 0;
+  border: 0;
+  color: #fff;
+  z-index: 1000;
+}
+
+.github-corner:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+
+@keyframes octocat-wave {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  20%, 60% {
+    transform: rotate(-25deg);
+  }
+  40%, 80% {
+    transform: rotate(10deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .github-corner svg {
+    width: 60px;
+    height: 60px;
+  }
+
+  .footer {
+    font-size: 0.75rem;
+    padding: 1rem;
+  }
+
+  .build-info {
+    font-size: 0.65rem;
+  }
+}
