@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="100" height="100"
+     viewBox="0 0 100 100">
+  <path d="
+    M 30 60
+    Q 28 50 32 42    <!-- neck -->
+    L 35 35
+    Q 33 30 35 25   <!-- back of head -->
+    L 38 22
+    L 42 22         <!-- top of head -->
+
+    <!-- simple antlers -->
+    L 45 14
+    L 47 16
+    L 44 22
+    L 48 16
+    L 50 18
+    L 46 24
+    L 42 22
+
+    L 50 25         <!-- nose area -->
+    Q 58 28 60 35   <!-- muzzle -->
+    L 61 40
+    Q 60 48 56 52   <!-- chest -->
+    L 55 60
+
+    <!-- back and rump -->
+    L 65 60
+    Q 72 60 74 67
+    L 74 80
+    L 68 80
+    L 68 72         <!-- back leg -->
+    L 62 72
+    L 62 80
+    L 56 80
+
+    <!-- belly and front leg -->
+    L 52 80
+    L 52 72
+    L 46 72
+    L 46 80
+    L 40 80
+
+    Q 34 78 30 72
+    Z
+  "
+  stroke="black" stroke-width="2" fill="none" />
+</svg>

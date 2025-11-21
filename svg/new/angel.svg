@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="100" height="100"
+     viewBox="0 0 100 100">
+  <!-- head -->
+  <circle cx="50" cy="22" r="7"
+          stroke="black" stroke-width="2" fill="none" />
+  <!-- halo -->
+  <ellipse cx="50" cy="14" rx="10" ry="3"
+           stroke="black" stroke-width="2" fill="none" />
+  <!-- wings + gown as one outline -->
+  <path d="
+    M 50 29
+    L 35 38
+    Q 25 44 25 52
+    Q 25 60 33 62
+    L 40 63
+    L 30 85
+    L 50 85
+    L 70 85
+    L 60 63
+    L 67 62
+    Q 75 60 75 52
+    Q 75 44 65 38
+    L 50 29
+    Z
+  "
+  stroke="black" stroke-width="2" fill="none" />
+</svg>

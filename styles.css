@@ -8,65 +8,61 @@ body {
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
-  overflow: hidden;
+  padding: 2rem;
+  gap: 3rem;
 }
 
 .utilities {
-  width: 100vw;
-  padding: 1rem;
+  width: 100%;
+  padding: 2rem;
   color: white;
   font-family: 'Lato', sans-serif;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+  order: 2;
 }
 
 .main {
   width: 100%;
-  height: 100px;
-  position: fixed;
-  top: 0;
+  min-height: 120px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  padding: 2rem;
+  order: 1;
+  flex-wrap: wrap;
 }
 
-.circle {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+.light {
+  width: 100px;
+  height: 100px;
   animation: blink 1s infinite;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
 }
 
-.circle.red {
-  background: #ff0000;
-  box-shadow: 0 0 20px #ff0000;
-  animation-delay: 0s;
+.light svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.circle.yellow {
-  background: #ffff00;
-  box-shadow: 0 0 20px #ffff00;
-  animation-delay: 0.25s;
+.light.red {
+  filter: drop-shadow(0 0 25px #ff0000) drop-shadow(0 0 50px rgba(255, 0, 0, 0.7));
 }
 
-.circle.blue {
-  background: #0000ff;
-  box-shadow: 0 0 20px #0000ff;
-  animation-delay: 0.5s;
+.light.green {
+  filter: drop-shadow(0 0 25px #00cc00) drop-shadow(0 0 50px rgba(0, 204, 0, 0.7));
 }
 
-.circle.green {
-  background: #00ff00;
-  box-shadow: 0 0 20px #00ff00;
-  animation-delay: 0.75s;
+.light.white {
+  filter: drop-shadow(0 0 25px #ffffff) drop-shadow(0 0 50px rgba(255, 255, 255, 0.7));
+}
+
+.light.yellow {
+  filter: drop-shadow(0 0 25px #ffdd00) drop-shadow(0 0 50px rgba(255, 221, 0, 0.7));
 }
 
 @keyframes blink {
@@ -85,9 +81,10 @@ body {
 }
 
 .title h1 {
-  font-size: 3rem;
+  font-size: 2.5rem;
   margin: 0;
   animation: titleBlink 2s infinite;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 @keyframes titleBlink {
@@ -101,44 +98,103 @@ body {
 
 .buttons {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
 }
 
-button, input[type="submit"] {
-  padding: 0.5rem 1rem;
+.speed-control, .mode-control {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: rgba(86, 50, 96, 0.4);
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.speed-display {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffdd00;
+  padding: 0.25rem 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  min-width: 40px;
+  text-align: center;
+}
+
+button {
+  padding: 0.75rem 1.5rem;
   font-size: 1rem;
+  font-weight: bold;
   background: #563260;
   color: white;
   border: 2px solid #fff;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
+  text-transform: uppercase;
 }
 
-button:hover, input[type="submit"]:hover {
+button:hover {
   background: #fff;
   color: #563260;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 input[type="number"] {
   padding: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
   border: 2px solid #fff;
-  border-radius: 5px;
-  background: #563260;
-  color: white;
-  width: 200px;
+  border-radius: 6px;
+  background: #2a1a2e;
+  color: #ffdd00;
+  width: 65px;
+  text-align: center;
+}
+
+input[type="number"]:focus {
+  outline: none;
+  border-color: #ffdd00;
+  box-shadow: 0 0 12px rgba(255, 221, 0, 0.6);
 }
 
 label {
   font-size: 1.2rem;
 }
 
+select {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid #fff;
+  border-radius: 6px;
+  background: #2a1a2e;
+  color: #ffdd00;
+  cursor: pointer;
+  min-width: 150px;
+}
+
+select:focus {
+  outline: none;
+  border-color: #ffdd00;
+  box-shadow: 0 0 12px rgba(255, 221, 0, 0.6);
+}
+
+select option {
+  background: #2a1a2e;
+  color: white;
+}
+
 .paused {
   animation-play-state: paused !important;
-  background: #563260 !important;
-  box-shadow: none !important;
+  opacity: 0.3 !important;
 }

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="100" height="100"
+     viewBox="0 0 100 100">
+  <path d="
+    M 50 15
+    C 42 15, 38 20, 38 26
+    L 38 35
+    C 38 45, 30 52, 30 63
+    L 30 70
+    Q 30 75, 35 75
+    L 65 75
+    Q 70 75, 70 70
+    L 70 63
+    C 70 52, 62 45, 62 35
+    L 62 26
+    C 62 20, 58 15, 50 15
+    Z
+  "
+  stroke="COLOR" stroke-width="3" fill="COLOR" fill-opacity="0.8" />
+  <!-- little top loop -->
+  <path d="M45 13 Q50 8 55 13"
+        stroke="#444" stroke-width="2" fill="none" />
+  <!-- clapper -->
+  <circle cx="50" cy="77" r="4"
+          stroke="#FFD700" stroke-width="2" fill="#FFD700" />
+</svg>

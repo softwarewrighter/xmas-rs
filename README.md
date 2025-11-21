@@ -25,22 +25,36 @@ Add the WebAssembly target:
 rustup target add wasm32-unknown-unknown
 ```
 
+## Project Configuration
+
+- **Port:** 7030 (configured for parallel development)
+- **URL:** http://localhost:7030
+
 ## Building and Running
+
+All development scripts are in the `./scripts` directory.
 
 ### Development Server
 
 To run the development server with hot-reloading:
 ```bash
-trunk serve
+./scripts/dev.sh
 ```
 
-Then open your browser to `http://127.0.0.1:8080`
+Then open your browser to `http://localhost:7030`
 
-### Production Build
+### Build Only
 
-To create an optimized production build:
+To create a clean build:
 ```bash
-trunk build --release
+./scripts/build.sh
+```
+
+### Production Server
+
+To build and serve:
+```bash
+./scripts/serve.sh
 ```
 
 The output will be in the `dist/` directory.
@@ -49,17 +63,35 @@ The output will be in the `dist/` directory.
 
 - Click **On** to start the lights animation
 - Click **Off** to stop the animation
-- Enter a speed value (1-5) in the input field and click **RUN** to adjust animation speed
-  - 1 = slowest
-  - 5 = fastest
+- Adjust the **Speed** input (1-5) to change animation speed in real-time
+  - 1 = slowest (2 seconds per blink cycle)
+  - 5 = fastest (0.5 seconds per blink cycle)
+
+## Color Scheme
+
+The lights use a festive Christmas color palette:
+- **Red** - Primary color (#ff0000)
+- **Green** - Primary color (#00cc00)
+- **Yellow** - Accent color (#ffdd00)
+- **White** - Accent color (#ffffff)
 
 ## Project Structure
 
 - `src/main.rs` - Main Yew component and application logic
 - `index.html` - HTML template
 - `styles.css` - CSS styles and animations
+- `svg/` - SVG templates for Christmas light shapes (editable)
+  - `bulb.svg` - Traditional Christmas light bulb
+  - `star.svg` - 5-pointed star
+  - `candy-cane.svg` - Candy cane with stripes
+  - `bell.svg` - Christmas bell
+- `scripts/` - Build and development scripts
 - `Cargo.toml` - Rust dependencies
 - `Trunk.toml` - Build configuration
+
+## Customizing Light Shapes
+
+You can customize the Christmas light shapes by editing the SVG files in the `./svg` directory. Each SVG uses `COLOR` as a placeholder which gets replaced at runtime with the actual light color. See `svg/README.md` for details on editing and adding new shapes.
 
 ## Original Implementation
 

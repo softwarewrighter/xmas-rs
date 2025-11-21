@@ -10,5 +10,5 @@ target = "index.html"
 ignore = ["dist"]
 
 [serve]
-port = 8080
+port = 7030
 address = "127.0.0.1"
