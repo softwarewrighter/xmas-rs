@@ -2,11 +2,18 @@
 
 A Rust implementation of a Christmas lights blinking animation using the Yew framework. This project is based on [this CodePen](https://codepen.io/irfanezani_/pen/mdeLpKo).
 
+## Screenshot
+
+![Christmas Lights Demo](./images/screenshot.png?ts=1763685357000)
+
 ## Features
 
-- 8 animated Christmas lights in red, yellow, blue, and green
+- 7 unique Christmas light shapes (Circle, Star, Candy Cane, Bell, Angel, Reindeer, Tree)
+- Mode selector: Mixed mode (one of each shape) or individual shape modes
+- 8 animated lights with festive Red/Green color scheme with Yellow/White accents
 - On/Off controls
-- Adjustable animation speed (1-5)
+- Auto-applying speed control (1-5)
+- Staggered blinking animation with glow effects
 - Built with Yew (Rust frontend framework)
 - Compiles to WebAssembly
 
@@ -66,6 +73,9 @@ The output will be in the `dist/` directory.
 - Adjust the **Speed** input (1-5) to change animation speed in real-time
   - 1 = slowest (2 seconds per blink cycle)
   - 5 = fastest (0.5 seconds per blink cycle)
+- Select **Mode** to choose light display:
+  - Mixed - Shows one of each shape (default)
+  - Individual shapes - Display 8 lights of the selected shape with varied colors
 
 ## Color Scheme
 
