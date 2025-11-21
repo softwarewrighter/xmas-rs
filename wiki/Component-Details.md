@@ -4,7 +4,11 @@ This page provides an in-depth look at each component, module, and function in t
 
 ## Table of Contents
 
-- [LightColor Enum](#lightcolor-enum)
+- [Enums](#enums)
+  - [LightColor Enum](#lightcolor-enum)
+  - [LightShape Enum](#lightshape-enum)
+  - [DisplayMode Enum](#displaymode-enum)
+- [Light Component](#light-component)
 - [App Component](#app-component)
 - [State Management](#state-management)
 - [Event Handlers](#event-handlers)
@@ -13,29 +17,31 @@ This page provides an in-depth look at each component, module, and function in t
 
 ---
 
-## LightColor Enum
+## Enums
 
-**Location**: `src/main.rs` (lines 5-22)
+### LightColor Enum
 
-### Purpose
+**Location**: `src/main.rs` (lines 4-58)
 
-Represents the four possible colors for Christmas lights in a type-safe manner.
+#### Purpose
 
-### Definition
+Represents the four festive colors for Christmas lights in a type-safe manner.
+
+#### Definition
 
 ```rust
 #[derive(Clone, PartialEq)]
 enum LightColor {
     Red,
-    Yellow,
-    Blue,
     Green,
+    White,
+    Yellow,
 }
 ```
 
-### Methods
+#### Methods
 
-#### `to_class(&self) -> &str`
+**`to_class(&self) -> &str`**
 
 Converts the enum variant to a CSS class name string.
 
@@ -47,18 +53,93 @@ let color = LightColor::Red;
 let class_name = color.to_class(); // Returns "red"
 ```
 
-### Traits
+**`to_rgb(&self) -> &str`**
+
+Converts the enum variant to an RGB hex color code.
+
+**Returns**: Hex color code string
+
+**Color Mappings**:
+- Red: `#ff0000`
+- Green: `#00cc00`
+- Yellow: `#ffdd00`
+- White: `#ffffff`
+
+**`animation_delay(&self, index: usize) -> &str`**
+
+Calculates the animation delay based on the light index for staggered blinking effect.
+
+**Returns**: Delay time string (0s, 0.25s, 0.5s, or 0.75s)
+
+**Pattern**: Uses modulo 4 to create staggered animation
+
+#### Traits
 
 - **Clone**: Allows creating copies of `LightColor` values
 - **PartialEq**: Enables equality comparison between `LightColor` values
 
-### Design Rationale
+---
 
-Using an enum instead of strings provides:
-- Compile-time type safety
-- Exhaustive match checking
-- Better IDE support and autocomplete
-- Prevention of typos in color names
+### LightShape Enum
+
+**Location**: `src/main.rs` (lines 14-21)
+
+#### Purpose
+
+Represents the 7 unique Christmas light shapes available in the application.
+
+#### Definition
+
+```rust
+#[derive(Clone, PartialEq)]
+enum LightShape {
+    Circle,
+    Star,
+    CandyCane,
+    Bell,
+    Angel,
+    Reindeer,
+    Tree,
+}
+```
+
+#### Design Rationale
+
+Each shape corresponds to inline SVG rendering in the Light component, providing:
+- Type-safe shape selection
+- Compile-time verification of shape names
+- Easy extensibility for adding new shapes
+
+---
+
+### DisplayMode Enum
+
+**Location**: `src/main.rs` (lines 23-32)
+
+#### Purpose
+
+Controls which lights pattern is displayed to the user.
+
+#### Definition
+
+```rust
+#[derive(Clone, PartialEq)]
+enum DisplayMode {
+    Mixed,
+    Circle,
+    Star,
+    CandyCane,
+    Bell,
+    Angel,
+    Reindeer,
+    Tree,
+}
+```
+
+#### Modes
+
+- **Mixed**: Shows one of each shape (default)
+- **Individual Shapes**: Displays 8 lights of the selected shape with varied colors
 
 ---
 

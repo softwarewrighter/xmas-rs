@@ -247,12 +247,11 @@ fn app() -> Html {
     let on_speed_change = {
         let speed = speed.clone();
         Callback::from(move |e: InputEvent| {
-            if let Some(input) = e.target_dyn_into::<HtmlInputElement>() {
-                if let Ok(value) = input.value().parse::<i32>() {
-                    if (1..=5).contains(&value) {
-                        speed.set(value);
-                    }
-                }
+            if let Some(input) = e.target_dyn_into::<HtmlInputElement>()
+                && let Ok(value) = input.value().parse::<i32>()
+                && (1..=5).contains(&value)
+            {
+                speed.set(value);
             }
         })
     };

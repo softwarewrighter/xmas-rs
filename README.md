@@ -19,7 +19,7 @@ A Rust implementation of a Christmas lights blinking animation using the Yew fra
 
 ## Prerequisites
 
-- Rust (latest stable version)
+- Rust (latest stable version with 2024 edition support)
 - Trunk (for building and serving the app)
 
 Install Trunk:
