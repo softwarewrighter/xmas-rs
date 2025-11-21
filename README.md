@@ -4,7 +4,7 @@ A Rust implementation of a Christmas lights blinking animation using the Yew fra
 
 ## Screenshot
 
-![Christmas Lights Demo](./images/screenshot.png?ts=1763685357000)
+![Christmas Lights Demo](./images/screenshot.png?ts=1763687154000)
 
 ## Features
 
