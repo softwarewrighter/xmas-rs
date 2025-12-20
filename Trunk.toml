@@ -5,6 +5,7 @@ command_arguments = ["-c", "echo 'Building Yew Christmas Lights app...'"]
 
 [build]
 target = "index.html"
+public-url = "/xmas-rs/"
 
 [[build.assets]]
 path = "images"
