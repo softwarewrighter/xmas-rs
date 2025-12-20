@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Christmas Lights</title>
+    <link rel="icon" href="/favicon-904fffe89ea23b44.ico" integrity="sha384-xiuoj6E2C0UyllX+8JzQ72Hkptt+fBWOEJHZhTfzOLBYiVzVvXK7P/eFAdumzvoO"/>
+    <link rel="stylesheet" href="/styles-21ef7f2f9c6ef325.css" integrity="sha384-6LyNXn0Cz7rtDHgaLRPmoQGJRGTYoaQCYxwQzU5q970gn5FHB4ABt5tZsT3H6fjX"/>
+<link rel="modulepreload" href="/xmas-rs-50835770be0b655b.js" crossorigin="anonymous" integrity="sha384-/zK9qlbVyVgq0rzA+8l/NUN7WhNk0WLsPZH+AA2EJ5c343Tsa5IJ+EBC5xie20Kz"><link rel="preload" href="/xmas-rs-50835770be0b655b_bg.wasm" crossorigin="anonymous" integrity="sha384-Krn3rUQh5uWatCu+pyrvZG0bmHjC8BqmttXjuKvhgmM4vbbveyUV2NZpF4feL7hH" as="fetch" type="application/wasm"></head>
+<body>
+<script type="module">
+import init, * as bindings from '/xmas-rs-50835770be0b655b.js';
+const wasm = await init({ module_or_path: '/xmas-rs-50835770be0b655b_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script></body>
+</html>

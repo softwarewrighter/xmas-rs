@@ -6,6 +6,10 @@ command_arguments = ["-c", "echo 'Building Yew Christmas Lights app...'"]
 [build]
 target = "index.html"
 
+[[build.assets]]
+path = "images"
+dest = "images"
+
 [watch]
 ignore = ["dist"]
 

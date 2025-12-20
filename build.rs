@@ -21,9 +21,9 @@ fn main() {
         .unwrap_or_else(|| "unknown".to_string());
 
     // Export as environment variables for compile time
-    println!("cargo:rustc-env=BUILD_GIT_SHA={}", git_sha);
-    println!("cargo:rustc-env=BUILD_TIMESTAMP={}", build_time);
-    println!("cargo:rustc-env=BUILD_HOST={}", build_host);
+    println!("cargo:rustc-env=BUILD_GIT_SHA={git_sha}");
+    println!("cargo:rustc-env=BUILD_TIMESTAMP={build_time}");
+    println!("cargo:rustc-env=BUILD_HOST={build_host}");
 
     // Rerun if git HEAD changes
     println!("cargo:rerun-if-changed=.git/HEAD");

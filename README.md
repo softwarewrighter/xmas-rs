@@ -1,6 +1,6 @@
-# Christmas Lights - Rust/Yew Implementation
+# Christmas Light Chain - Rust/Yew Implementation
 
-A Rust implementation of a Christmas lights blinking animation using the Yew framework. This project is based on [this CodePen](https://codepen.io/irfanezani_/pen/mdeLpKo).
+A Rust implementation of a customizable Christmas light chain animation using the Yew framework. Build your own festive light display with 13 unique SVG shapes, multiple color modes, and various animation effects.
 
 ## Screenshot
 
@@ -8,14 +8,40 @@ A Rust implementation of a Christmas lights blinking animation using the Yew fra
 
 ## Features
 
-- 7 unique Christmas light shapes (Circle, Star, Candy Cane, Bell, Angel, Reindeer, Tree)
-- Mode selector: Mixed mode (one of each shape) or individual shape modes
-- 8 animated lights with festive Red/Green color scheme with Yellow/White accents
+### Light Chain Builder
+- **13 unique Christmas shapes**: Stocking, Christmas Tree, Snowman, Star, Reindeer, Snowflake, Light Bulb, Icicle, Candy Cane, Ornament, Santa's Sleigh, and Wreath
+- **Chain selection modes**:
+  - 1 Image (Repeat) - Single image repeated 8 times
+  - 2 Images (Alternate) - Two images alternating
+  - 3 Images (Cycle) - Three images cycling
+  - 4 Images (Cycle) - Four images cycling
+  - 8 Images (Manual) - Select each position manually
+  - 8 Images (Random) - Random selection with Randomize button
+
+### Color Options
+- **8 festive colors**: Red, Green, White, Yellow, Blue, Purple, Orange, Pink
+- **5 color modes**:
+  - Rainbow - Cycles through all colors
+  - Per Image - Each position gets its own color
+  - All Same - Override all to single color
+  - Alternating - Even/odd positions alternate between two colors
+  - Match Repeats - Same shapes get the same color
+
+### Animation Modes
+- **Solid On** - Always on, no animation
+- **Blink** - Classic on/off blinking
+- **Fade** - Smooth fade in/out
+- **Sequence** - Lights turn on/off one by one
+- **Wave** - Brightness wave travels through chain
+- **Chase** - Chasing light pattern
+
+### Technical Features
 - On/Off controls
 - Auto-applying speed control (1-5)
-- Staggered blinking animation with glow effects
+- Colored glow effects per light
 - Built with Yew (Rust frontend framework)
 - Compiles to WebAssembly
+- Rust 2024 edition
 
 ## Prerequisites
 
@@ -68,41 +94,36 @@ The output will be in the `dist/` directory.
 
 ## Usage
 
-- Click **On** to start the lights animation
-- Click **Off** to stop the animation
-- Adjust the **Speed** input (1-5) to change animation speed in real-time
-  - 1 = slowest (2 seconds per blink cycle)
-  - 5 = fastest (0.5 seconds per blink cycle)
-- Select **Mode** to choose light display:
-  - Mixed - Shows one of each shape (default)
-  - Individual shapes - Display 8 lights of the selected shape with varied colors
+1. **Select Chain Mode** - Choose how many images to use and how they repeat
+2. **Select Images** - Pick your favorite Christmas shapes for each position
+3. **Choose Color Mode** - Select how colors are applied to the lights
+4. **Pick Animation** - Choose the animation effect you prefer
+5. **Adjust Speed** - Use the speed control (1-5) to change animation speed
+6. **Toggle On/Off** - Start or stop the animation
 
 ## Color Scheme
 
-The lights use a festive Christmas color palette:
-- **Red** - Primary color (#ff0000)
-- **Green** - Primary color (#00cc00)
-- **Yellow** - Accent color (#ffdd00)
-- **White** - Accent color (#ffffff)
+The lights use an expanded festive color palette:
+- **Red** (#ff0000) - Classic Christmas
+- **Green** (#00cc00) - Traditional holiday
+- **White** (#ffffff) - Snow/Winter
+- **Yellow** (#ffdd00) - Star/Warm glow
+- **Blue** (#0088ff) - Winter/Ice
+- **Purple** (#aa00ff) - Royal accent
+- **Orange** (#ff8800) - Warm accent
+- **Pink** (#ff66cc) - Festive accent
 
 ## Project Structure
 
 - `src/main.rs` - Main Yew component and application logic
 - `index.html` - HTML template
 - `styles.css` - CSS styles and animations
-- `svg/` - SVG templates for Christmas light shapes (editable)
-  - `bulb.svg` - Traditional Christmas light bulb
-  - `star.svg` - 5-pointed star
-  - `candy-cane.svg` - Candy cane with stripes
-  - `bell.svg` - Christmas bell
+- `images/` - SVG Christmas shapes (13 images)
+- `svg/` - Legacy SVG templates
 - `scripts/` - Build and development scripts
 - `Cargo.toml` - Rust dependencies
 - `Trunk.toml` - Build configuration
 
-## Customizing Light Shapes
-
-You can customize the Christmas light shapes by editing the SVG files in the `./svg` directory. Each SVG uses `COLOR` as a placeholder which gets replaced at runtime with the actual light color. See `svg/README.md` for details on editing and adding new shapes.
-
 ## Original Implementation
 
-This is a Rust/WebAssembly implementation of the original JavaScript version created by Irfan Ezani.
+This project started as a Rust/WebAssembly implementation of [this CodePen](https://codepen.io/irfanezani_/pen/mdeLpKo) by Irfan Ezani and has been significantly expanded with the light chain builder feature.

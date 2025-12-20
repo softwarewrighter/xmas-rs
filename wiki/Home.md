@@ -1,26 +1,29 @@
-# Christmas Lights - xmas-rs
+# Christmas Light Chain - xmas-rs
 
-Welcome to the **xmas-rs** project wiki! This project is a Rust implementation of an animated Christmas lights display using the Yew framework and WebAssembly.
+Welcome to the **xmas-rs** project wiki! This project is a Rust implementation of a customizable Christmas light chain builder using the Yew framework and WebAssembly.
 
 ## Overview
 
-xmas-rs is a web application that renders an animated Christmas lights display with interactive controls. The application features 8 colorful lights in 7 unique shapes that blink in sequence with customizable speed, mode selection, and on/off controls.
+xmas-rs is a web application that lets you build and animate your own Christmas light chains with 13 unique SVG shapes, 8 colors, multiple animation modes, and various customization options.
 
 ### Key Features
 
-- **7 Unique Shapes**: Circle, Star, Candy Cane, Bell, Angel, Reindeer, and Tree
-- **Mode Selector**: Choose between Mixed mode (one of each shape) or individual shape modes
-- **Festive Colors**: Primary Red and Green with Yellow and White accents
-- **Interactive Controls**: On/Off buttons to start/stop the animation
-- **Auto-Applying Speed**: Adjustable animation speed from 1 (slowest) to 5 (fastest)
-- **Staggered Animation**: Lights blink with delays for a cascading effect
+- **13 Unique Shapes**: Stocking, Christmas Tree, Snowman, Star, Reindeer, Snowflake, Light Bulb, Icicle, Candy Cane, Ornament, Snowman 2, Santa's Sleigh, and Wreath
+- **Chain Selection Modes**:
+  - 1-4 images repeated to fill 8 positions
+  - 8 images selected manually
+  - 8 random images with Randomize button
+- **8 Festive Colors**: Red, Green, White, Yellow, Blue, Purple, Orange, Pink
+- **5 Color Modes**: Rainbow, Per Image, All Same, Alternating, Match Repeats
+- **6 Animation Modes**: Solid On, Blink, Fade, Sequence, Wave, Chase
+- **Interactive Controls**: On/Off buttons, speed control (1-5)
 - **Pure Rust**: Built entirely in Rust using the Yew framework with Rust 2024 edition features
 - **WebAssembly**: Compiled to WASM for high-performance browser execution
-- **SVG Graphics**: Inline SVG rendering with dynamic coloring and glow effects
+- **SVG Graphics**: Dynamic SVG coloring with glow effects
 
 ## Project Origin
 
-This project is a Rust implementation of [this CodePen](https://codepen.io/irfanezani_/pen/mdeLpKo) by Irfan Ezani, demonstrating how traditional JavaScript web applications can be reimagined using modern Rust web frameworks.
+This project started as a Rust implementation of [this CodePen](https://codepen.io/irfanezani_/pen/mdeLpKo) by Irfan Ezani and has been significantly expanded with the light chain builder feature.
 
 ## Quick Start
 
@@ -55,7 +58,7 @@ This wiki is organized into the following sections:
 - **Target**: WebAssembly (wasm32-unknown-unknown)
 - **Port**: 7030 (configured for parallel development)
 - **Styling**: CSS3 with animations, drop-shadow filters, and flexbox
-- **Graphics**: Inline SVG with dynamic coloring
+- **Graphics**: Embedded SVG with dynamic coloring via `include_str!`
 - **Dependencies**:
   - `yew` - Reactive web framework
   - `wasm-bindgen` - JavaScript interop
@@ -64,12 +67,13 @@ This wiki is organized into the following sections:
 
 ## Project Statistics
 
-- **Lines of Code**: ~350 lines of Rust
-- **Components**: 2 components (App, Light)
-- **Shapes**: 7 unique SVG light shapes
-- **Modes**: 8 display modes (1 mixed + 7 individual)
-- **Colors**: 4 festive colors
-- **Dependencies**: 4 core dependencies
+- **Lines of Code**: ~790 lines of Rust
+- **Components**: 2 components (App, ChainLight)
+- **Shapes**: 13 unique SVG Christmas shapes
+- **Selection Modes**: 6 chain configuration modes
+- **Color Modes**: 5 color application modes
+- **Animation Modes**: 6 animation effects
+- **Colors**: 8 festive colors
 - **Build Scripts**: 3 shell scripts (build.sh, serve.sh, dev.sh)
 - **Build Target**: WebAssembly
 - **Browser Compatibility**: All modern browsers with WASM support
@@ -85,7 +89,7 @@ To contribute to this project:
 
 ## License
 
-Please refer to the main repository for license information.
+MIT License - see the main repository for details.
 
 ---
 
