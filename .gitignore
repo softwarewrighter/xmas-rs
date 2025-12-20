@@ -1,7 +1,11 @@
 /target
 /dist
+
+# Ignore generated files except in docs/ for GitHub Pages
 *.wasm
+!docs/*.wasm
 
 # Temporary scripts
 *.js
 !scripts/**/*.js
+!docs/*.js
