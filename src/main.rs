@@ -228,6 +228,21 @@ impl AnimationMode {
     }
 }
 
+#[derive(Clone, PartialEq, Copy)]
+pub enum ViewMode {
+    Settings,
+    Demo,
+}
+
+impl ViewMode {
+    fn name(&self) -> &str {
+        match self {
+            ViewMode::Settings => "Settings",
+            ViewMode::Demo => "Demo",
+        }
+    }
+}
+
 #[derive(Properties, PartialEq)]
 struct ChainLightProps {
     shape: ImageShape,
@@ -236,6 +251,8 @@ struct ChainLightProps {
     animation_mode: AnimationMode,
     speed: i32,
     is_playing: bool,
+    #[prop_or(0)]
+    rotation: i32, // Rotation in degrees for side lights
 }
 
 #[function_component(ChainLight)]
@@ -286,10 +303,16 @@ fn chain_light(props: &ChainLightProps) -> Html {
     // Parse the SVG as raw HTML
     let svg_node = Html::from_html_unchecked(AttrValue::from(colored_svg));
 
+    let rotation_style = if props.rotation != 0 {
+        format!("; transform: rotate({}deg)", props.rotation)
+    } else {
+        String::new()
+    };
+
     html! {
         <div
             class={full_class}
-            style={format!("--anim-delay: {delay}; --anim-duration: {duration}")}
+            style={format!("--anim-delay: {delay}; --anim-duration: {duration}{rotation_style}")}
         >
             <div class="svg-container">
                 {svg_node}
@@ -305,6 +328,10 @@ fn pseudo_random(seed: usize, max: usize) -> usize {
 
 #[function_component(App)]
 fn app() -> Html {
+    // State for view mode (Settings vs Demo)
+    let view_mode = use_state(|| ViewMode::Settings);
+    let christmas_message = use_state(|| "Merry Christmas!".to_string());
+
     // State for light chain configuration
     let selection_mode = use_state(|| SelectionMode::Repeat4);
     let color_mode = use_state(|| ColorMode::Rainbow);
@@ -387,6 +414,29 @@ fn app() -> Html {
     };
 
     // Event handlers
+    let on_view_mode_change = {
+        let view_mode = view_mode.clone();
+        Callback::from(move |e: Event| {
+            if let Some(select) = e.target_dyn_into::<web_sys::HtmlSelectElement>() {
+                let mode = match select.value().as_str() {
+                    "Settings" => ViewMode::Settings,
+                    "Demo" => ViewMode::Demo,
+                    _ => ViewMode::Settings,
+                };
+                view_mode.set(mode);
+            }
+        })
+    };
+
+    let on_message_change = {
+        let christmas_message = christmas_message.clone();
+        Callback::from(move |e: InputEvent| {
+            if let Some(input) = e.target_dyn_into::<HtmlInputElement>() {
+                christmas_message.set(input.value());
+            }
+        })
+    };
+
     let on_play = {
         let is_playing = is_playing.clone();
         Callback::from(move |_| is_playing.set(true))
@@ -549,214 +599,381 @@ fn app() -> Html {
         SelectionMode::Random8 => 0,
     };
 
+    // Build extended chain for demo mode (32 lights: 8 top + 8 right + 8 bottom + 8 left)
+    let demo_chain: Vec<(ImageShape, LightColor)> = {
+        let images = (*selected_images).clone();
+        let all_shapes = ImageShape::all();
+
+        // Generate 32 shapes for demo mode frame
+        let shapes: Vec<ImageShape> = match *selection_mode {
+            SelectionMode::Repeat1 => vec![images[0]; 32],
+            SelectionMode::Repeat2 => (0..32).map(|i| images[i % 2]).collect(),
+            SelectionMode::Repeat3 => (0..32).map(|i| images[i % 3]).collect(),
+            SelectionMode::Repeat4 => (0..32).map(|i| images[i % 4]).collect(),
+            SelectionMode::Manual8 => (0..32).map(|i| images[i % 8]).collect(),
+            SelectionMode::Random8 => {
+                let seed = *random_seed;
+                (0..32)
+                    .map(|i| {
+                        let idx = pseudo_random(seed + i * 7, all_shapes.len());
+                        all_shapes[idx]
+                    })
+                    .collect()
+            }
+        };
+
+        // Apply colors
+        let all_colors = LightColor::all();
+        shapes
+            .iter()
+            .enumerate()
+            .map(|(i, shape)| {
+                let color = match *color_mode {
+                    ColorMode::PerImage => all_colors[i % all_colors.len()],
+                    ColorMode::AllSame => *primary_color,
+                    ColorMode::Alternating => {
+                        if i.is_multiple_of(2) {
+                            *primary_color
+                        } else {
+                            *secondary_color
+                        }
+                    }
+                    ColorMode::Rainbow => all_colors[i % all_colors.len()],
+                    ColorMode::RepeatMatch => {
+                        let shape_idx = all_shapes.iter().position(|s| s == shape).unwrap_or(0);
+                        all_colors[shape_idx % all_colors.len()]
+                    }
+                };
+                (*shape, color)
+            })
+            .collect()
+    };
+
     html! {
         <>
-            <div class="main">
-                {
-                    chain.iter().enumerate().map(|(i, (shape, color))| {
-                        html! {
-                            <ChainLight
-                                shape={*shape}
-                                color={*color}
-                                index={i}
-                                animation_mode={*animation_mode}
-                                speed={*speed}
-                                is_playing={*is_playing}
-                            />
-                        }
-                    }).collect::<Html>()
-                }
-            </div>
-
-            <div class="utilities">
-                <div class="title">
-                    <h1 id="title">{ "Christmas Light Chain" }</h1>
+            // Header with view mode toggle
+            <header class="app-header">
+                <h1 id="title">{ "Christmas Light Chain" }</h1>
+                <div class="mode-control view-toggle">
+                    <label for="view-mode">{ "View:" }</label>
+                    <select id="view-mode" onchange={on_view_mode_change}>
+                        <option value="Settings" selected={matches!(*view_mode, ViewMode::Settings)}>
+                            { ViewMode::Settings.name() }
+                        </option>
+                        <option value="Demo" selected={matches!(*view_mode, ViewMode::Demo)}>
+                            { ViewMode::Demo.name() }
+                        </option>
+                    </select>
                 </div>
+            </header>
 
-                <div class="controls-grid">
-                    // Row 1: On/Off and Speed
-                    <div class="control-group">
-                        <button id="play" onclick={on_play}>{ "On" }</button>
-                        <button id="stop" onclick={on_stop}>{ "Off" }</button>
-                        <div class="speed-control">
-                            <label for="speed">{ "Speed:" }</label>
-                            <input
-                                type="number"
-                                id="speed"
-                                min="1"
-                                max="5"
-                                value={speed.to_string()}
-                                oninput={on_speed_change}
-                            />
-                        </div>
-                    </div>
-
-                    // Row 2: Selection Mode and Animation Mode
-                    <div class="control-group">
-                        <div class="mode-control">
-                            <label for="selection-mode">{ "Chain:" }</label>
-                            <select id="selection-mode" onchange={on_selection_mode_change}>
-                                <option value="Repeat1" selected={matches!(*selection_mode, SelectionMode::Repeat1)}>
-                                    { SelectionMode::Repeat1.name() }
-                                </option>
-                                <option value="Repeat2" selected={matches!(*selection_mode, SelectionMode::Repeat2)}>
-                                    { SelectionMode::Repeat2.name() }
-                                </option>
-                                <option value="Repeat3" selected={matches!(*selection_mode, SelectionMode::Repeat3)}>
-                                    { SelectionMode::Repeat3.name() }
-                                </option>
-                                <option value="Repeat4" selected={matches!(*selection_mode, SelectionMode::Repeat4)}>
-                                    { SelectionMode::Repeat4.name() }
-                                </option>
-                                <option value="Manual8" selected={matches!(*selection_mode, SelectionMode::Manual8)}>
-                                    { SelectionMode::Manual8.name() }
-                                </option>
-                                <option value="Random8" selected={matches!(*selection_mode, SelectionMode::Random8)}>
-                                    { SelectionMode::Random8.name() }
-                                </option>
-                            </select>
-                        </div>
-
-                        <div class="mode-control">
-                            <label for="animation-mode">{ "Animation:" }</label>
-                            <select id="animation-mode" onchange={on_animation_mode_change}>
-                                <option value="Solid" selected={matches!(*animation_mode, AnimationMode::Solid)}>
-                                    { AnimationMode::Solid.name() }
-                                </option>
-                                <option value="Blink" selected={matches!(*animation_mode, AnimationMode::Blink)}>
-                                    { AnimationMode::Blink.name() }
-                                </option>
-                                <option value="Fade" selected={matches!(*animation_mode, AnimationMode::Fade)}>
-                                    { AnimationMode::Fade.name() }
-                                </option>
-                                <option value="Sequence" selected={matches!(*animation_mode, AnimationMode::Sequence)}>
-                                    { AnimationMode::Sequence.name() }
-                                </option>
-                                <option value="Wave" selected={matches!(*animation_mode, AnimationMode::Wave)}>
-                                    { AnimationMode::Wave.name() }
-                                </option>
-                                <option value="Chase" selected={matches!(*animation_mode, AnimationMode::Chase)}>
-                                    { AnimationMode::Chase.name() }
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-
-                    // Row 3: Color Mode and Color Selection
-                    <div class="control-group">
-                        <div class="mode-control">
-                            <label for="color-mode">{ "Colors:" }</label>
-                            <select id="color-mode" onchange={on_color_mode_change}>
-                                <option value="Rainbow" selected={matches!(*color_mode, ColorMode::Rainbow)}>
-                                    { ColorMode::Rainbow.name() }
-                                </option>
-                                <option value="PerImage" selected={matches!(*color_mode, ColorMode::PerImage)}>
-                                    { ColorMode::PerImage.name() }
-                                </option>
-                                <option value="AllSame" selected={matches!(*color_mode, ColorMode::AllSame)}>
-                                    { ColorMode::AllSame.name() }
-                                </option>
-                                <option value="Alternating" selected={matches!(*color_mode, ColorMode::Alternating)}>
-                                    { ColorMode::Alternating.name() }
-                                </option>
-                                <option value="RepeatMatch" selected={matches!(*color_mode, ColorMode::RepeatMatch)}>
-                                    { ColorMode::RepeatMatch.name() }
-                                </option>
-                            </select>
-                        </div>
-
-                        {
-                            if matches!(*color_mode, ColorMode::AllSame | ColorMode::Alternating) {
-                                html! {
-                                    <div class="mode-control">
-                                        <label for="primary-color">{ "Color 1:" }</label>
-                                        <select id="primary-color" onchange={on_primary_color_change}>
-                                            { for LightColor::all().iter().map(|c| {
-                                                html! {
-                                                    <option
-                                                        value={format!("{c:?}").replace("LightColor::", "")}
-                                                        selected={*primary_color == *c}
-                                                    >
-                                                        { c.name() }
-                                                    </option>
-                                                }
-                                            })}
-                                        </select>
-                                    </div>
-                                }
-                            } else {
-                                html! {}
-                            }
-                        }
-
-                        {
-                            if matches!(*color_mode, ColorMode::Alternating) {
-                                html! {
-                                    <div class="mode-control">
-                                        <label for="secondary-color">{ "Color 2:" }</label>
-                                        <select id="secondary-color" onchange={on_secondary_color_change}>
-                                            { for LightColor::all().iter().map(|c| {
-                                                html! {
-                                                    <option
-                                                        value={format!("{c:?}").replace("LightColor::", "")}
-                                                        selected={*secondary_color == *c}
-                                                    >
-                                                        { c.name() }
-                                                    </option>
-                                                }
-                                            })}
-                                        </select>
-                                    </div>
-                                }
-                            } else {
-                                html! {}
-                            }
-                        }
-                    </div>
-
-                    // Row 4: Image Selection
-                    {
-                        if num_selectors > 0 {
-                            html! {
-                                <div class="control-group image-selectors">
-                                    <label class="section-label">{ "Select Images:" }</label>
-                                    { for (0..num_selectors).map(|i| {
-                                        let handler = make_image_change_handler(i);
-                                        let current = selected_images.get(i).cloned().unwrap_or(ImageShape::Stocking);
+            {
+                if matches!(*view_mode, ViewMode::Demo) {
+                    // Demo mode: message framed by lights
+                    html! {
+                        <div class="demo-container">
+                            <div class="demo-frame">
+                                // Top row (8 lights)
+                                <div class="demo-row demo-top">
+                                    { for demo_chain.iter().take(8).enumerate().map(|(i, (shape, color))| {
                                         html! {
-                                            <div class="mode-control compact">
-                                                <label>{ format!("#{}", i + 1) }</label>
-                                                <select onchange={handler}>
-                                                    { for ImageShape::all().iter().map(|s| {
-                                                        html! {
-                                                            <option
-                                                                value={format!("{s:?}")}
-                                                                selected={current == *s}
-                                                            >
-                                                                { s.name() }
-                                                            </option>
-                                                        }
-                                                    })}
-                                                </select>
-                                            </div>
+                                            <ChainLight
+                                                shape={*shape}
+                                                color={*color}
+                                                index={i}
+                                                animation_mode={*animation_mode}
+                                                speed={*speed}
+                                                is_playing={*is_playing}
+                                            />
                                         }
                                     })}
                                 </div>
-                            }
-                        } else if matches!(*selection_mode, SelectionMode::Random8) {
-                            html! {
-                                <div class="control-group">
-                                    <button class="randomize-btn" onclick={on_randomize}>
-                                        { "Randomize" }
-                                    </button>
+
+                                // Middle section with side columns and message
+                                <div class="demo-middle">
+                                    // Left column (8 lights, top to bottom)
+                                    <div class="demo-column demo-left">
+                                        { for demo_chain.iter().skip(24).take(8).enumerate().map(|(i, (shape, color))| {
+                                            html! {
+                                                <ChainLight
+                                                    shape={*shape}
+                                                    color={*color}
+                                                    index={24 + i}
+                                                    animation_mode={*animation_mode}
+                                                    speed={*speed}
+                                                    is_playing={*is_playing}
+                                                    rotation={90}
+                                                />
+                                            }
+                                        })}
+                                    </div>
+
+                                    // Message in the center
+                                    <div class="demo-message">
+                                        <span>{ (*christmas_message).clone() }</span>
+                                    </div>
+
+                                    // Right column (8 lights, top to bottom)
+                                    <div class="demo-column demo-right">
+                                        { for demo_chain.iter().skip(8).take(8).enumerate().map(|(i, (shape, color))| {
+                                            html! {
+                                                <ChainLight
+                                                    shape={*shape}
+                                                    color={*color}
+                                                    index={8 + i}
+                                                    animation_mode={*animation_mode}
+                                                    speed={*speed}
+                                                    is_playing={*is_playing}
+                                                    rotation={-90}
+                                                />
+                                            }
+                                        })}
+                                    </div>
                                 </div>
-                            }
-                        } else {
-                            html! {}
-                        }
+
+                                // Bottom row (8 lights)
+                                <div class="demo-row demo-bottom">
+                                    { for demo_chain.iter().skip(16).take(8).enumerate().map(|(i, (shape, color))| {
+                                        html! {
+                                            <ChainLight
+                                                shape={*shape}
+                                                color={*color}
+                                                index={16 + i}
+                                                animation_mode={*animation_mode}
+                                                speed={*speed}
+                                                is_playing={*is_playing}
+                                                rotation={180}
+                                            />
+                                        }
+                                    })}
+                                </div>
+                            </div>
+                        </div>
                     }
-                </div>
-            </div>
+                } else {
+                    // Settings mode: original UI
+                    html! {
+                        <>
+                            <div class="main">
+                                {
+                                    chain.iter().enumerate().map(|(i, (shape, color))| {
+                                        html! {
+                                            <ChainLight
+                                                shape={*shape}
+                                                color={*color}
+                                                index={i}
+                                                animation_mode={*animation_mode}
+                                                speed={*speed}
+                                                is_playing={*is_playing}
+                                            />
+                                        }
+                                    }).collect::<Html>()
+                                }
+                            </div>
+
+                            <div class="utilities">
+                                <div class="controls-grid">
+                                    // Row 0: Message input
+                                    <div class="control-group">
+                                        <div class="message-control">
+                                            <label for="christmas-message">{ "Demo Message:" }</label>
+                                            <input
+                                                type="text"
+                                                id="christmas-message"
+                                                value={(*christmas_message).clone()}
+                                                oninput={on_message_change}
+                                                placeholder="Enter your Christmas message"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    // Row 1: On/Off and Speed
+                                    <div class="control-group">
+                                        <button id="play" onclick={on_play}>{ "On" }</button>
+                                        <button id="stop" onclick={on_stop}>{ "Off" }</button>
+                                        <div class="speed-control">
+                                            <label for="speed">{ "Speed:" }</label>
+                                            <input
+                                                type="number"
+                                                id="speed"
+                                                min="1"
+                                                max="5"
+                                                value={speed.to_string()}
+                                                oninput={on_speed_change}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    // Row 2: Selection Mode and Animation Mode
+                                    <div class="control-group">
+                                        <div class="mode-control">
+                                            <label for="selection-mode">{ "Chain:" }</label>
+                                            <select id="selection-mode" onchange={on_selection_mode_change}>
+                                                <option value="Repeat1" selected={matches!(*selection_mode, SelectionMode::Repeat1)}>
+                                                    { SelectionMode::Repeat1.name() }
+                                                </option>
+                                                <option value="Repeat2" selected={matches!(*selection_mode, SelectionMode::Repeat2)}>
+                                                    { SelectionMode::Repeat2.name() }
+                                                </option>
+                                                <option value="Repeat3" selected={matches!(*selection_mode, SelectionMode::Repeat3)}>
+                                                    { SelectionMode::Repeat3.name() }
+                                                </option>
+                                                <option value="Repeat4" selected={matches!(*selection_mode, SelectionMode::Repeat4)}>
+                                                    { SelectionMode::Repeat4.name() }
+                                                </option>
+                                                <option value="Manual8" selected={matches!(*selection_mode, SelectionMode::Manual8)}>
+                                                    { SelectionMode::Manual8.name() }
+                                                </option>
+                                                <option value="Random8" selected={matches!(*selection_mode, SelectionMode::Random8)}>
+                                                    { SelectionMode::Random8.name() }
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mode-control">
+                                            <label for="animation-mode">{ "Animation:" }</label>
+                                            <select id="animation-mode" onchange={on_animation_mode_change}>
+                                                <option value="Solid" selected={matches!(*animation_mode, AnimationMode::Solid)}>
+                                                    { AnimationMode::Solid.name() }
+                                                </option>
+                                                <option value="Blink" selected={matches!(*animation_mode, AnimationMode::Blink)}>
+                                                    { AnimationMode::Blink.name() }
+                                                </option>
+                                                <option value="Fade" selected={matches!(*animation_mode, AnimationMode::Fade)}>
+                                                    { AnimationMode::Fade.name() }
+                                                </option>
+                                                <option value="Sequence" selected={matches!(*animation_mode, AnimationMode::Sequence)}>
+                                                    { AnimationMode::Sequence.name() }
+                                                </option>
+                                                <option value="Wave" selected={matches!(*animation_mode, AnimationMode::Wave)}>
+                                                    { AnimationMode::Wave.name() }
+                                                </option>
+                                                <option value="Chase" selected={matches!(*animation_mode, AnimationMode::Chase)}>
+                                                    { AnimationMode::Chase.name() }
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    // Row 3: Color Mode and Color Selection
+                                    <div class="control-group">
+                                        <div class="mode-control">
+                                            <label for="color-mode">{ "Colors:" }</label>
+                                            <select id="color-mode" onchange={on_color_mode_change}>
+                                                <option value="Rainbow" selected={matches!(*color_mode, ColorMode::Rainbow)}>
+                                                    { ColorMode::Rainbow.name() }
+                                                </option>
+                                                <option value="PerImage" selected={matches!(*color_mode, ColorMode::PerImage)}>
+                                                    { ColorMode::PerImage.name() }
+                                                </option>
+                                                <option value="AllSame" selected={matches!(*color_mode, ColorMode::AllSame)}>
+                                                    { ColorMode::AllSame.name() }
+                                                </option>
+                                                <option value="Alternating" selected={matches!(*color_mode, ColorMode::Alternating)}>
+                                                    { ColorMode::Alternating.name() }
+                                                </option>
+                                                <option value="RepeatMatch" selected={matches!(*color_mode, ColorMode::RepeatMatch)}>
+                                                    { ColorMode::RepeatMatch.name() }
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        {
+                                            if matches!(*color_mode, ColorMode::AllSame | ColorMode::Alternating) {
+                                                html! {
+                                                    <div class="mode-control">
+                                                        <label for="primary-color">{ "Color 1:" }</label>
+                                                        <select id="primary-color" onchange={on_primary_color_change}>
+                                                            { for LightColor::all().iter().map(|c| {
+                                                                html! {
+                                                                    <option
+                                                                        value={format!("{c:?}").replace("LightColor::", "")}
+                                                                        selected={*primary_color == *c}
+                                                                    >
+                                                                        { c.name() }
+                                                                    </option>
+                                                                }
+                                                            })}
+                                                        </select>
+                                                    </div>
+                                                }
+                                            } else {
+                                                html! {}
+                                            }
+                                        }
+
+                                        {
+                                            if matches!(*color_mode, ColorMode::Alternating) {
+                                                html! {
+                                                    <div class="mode-control">
+                                                        <label for="secondary-color">{ "Color 2:" }</label>
+                                                        <select id="secondary-color" onchange={on_secondary_color_change}>
+                                                            { for LightColor::all().iter().map(|c| {
+                                                                html! {
+                                                                    <option
+                                                                        value={format!("{c:?}").replace("LightColor::", "")}
+                                                                        selected={*secondary_color == *c}
+                                                                    >
+                                                                        { c.name() }
+                                                                    </option>
+                                                                }
+                                                            })}
+                                                        </select>
+                                                    </div>
+                                                }
+                                            } else {
+                                                html! {}
+                                            }
+                                        }
+                                    </div>
+
+                                    // Row 4: Image Selection
+                                    {
+                                        if num_selectors > 0 {
+                                            html! {
+                                                <div class="control-group image-selectors">
+                                                    <label class="section-label">{ "Select Images:" }</label>
+                                                    { for (0..num_selectors).map(|i| {
+                                                        let handler = make_image_change_handler(i);
+                                                        let current = selected_images.get(i).cloned().unwrap_or(ImageShape::Stocking);
+                                                        html! {
+                                                            <div class="mode-control compact">
+                                                                <label>{ format!("#{}", i + 1) }</label>
+                                                                <select onchange={handler}>
+                                                                    { for ImageShape::all().iter().map(|s| {
+                                                                        html! {
+                                                                            <option
+                                                                                value={format!("{s:?}")}
+                                                                                selected={current == *s}
+                                                                            >
+                                                                                { s.name() }
+                                                                            </option>
+                                                                        }
+                                                                    })}
+                                                                </select>
+                                                            </div>
+                                                        }
+                                                    })}
+                                                </div>
+                                            }
+                                        } else if matches!(*selection_mode, SelectionMode::Random8) {
+                                            html! {
+                                                <div class="control-group">
+                                                    <button class="randomize-btn" onclick={on_randomize}>
+                                                        { "Randomize" }
+                                                    </button>
+                                                </div>
+                                            }
+                                        } else {
+                                            html! {}
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </>
+                    }
+                }
+            }
 
             <footer class="footer">
                 <div class="footer-content">

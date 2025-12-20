@@ -2,13 +2,17 @@
 
 A Rust implementation of a customizable Christmas light chain animation using the Yew framework. Build your own festive light display with 13 unique SVG shapes, multiple color modes, and various animation effects.
 
-**[🎄 Live Demo](https://softwarewrighter.github.io/xmas-rs/?ts=1766194509234)**
+**[🎄 Live Demo](https://softwarewrighter.github.io/xmas-rs/?ts=1766198694963)**
 
 ## Screenshot
 
-![Christmas Lights Demo](./images/screenshot.png?ts=1766194509234)
+![Christmas Lights Demo](./images/screenshot.png?ts=1766198694963)
 
 ## Features
+
+### View Modes
+- **Settings Mode** - Configure all light options and preview your chain
+- **Demo Mode** - Display a custom Christmas message framed by 32 animated lights (8 on each side)
 
 ### Light Chain Builder
 - **13 unique Christmas shapes**: Stocking, Christmas Tree, Snowman, Star, Reindeer, Snowflake, Light Bulb, Icicle, Candy Cane, Ornament, Santa's Sleigh, and Wreath
@@ -96,12 +100,15 @@ The output will be in the `dist/` directory.
 
 ## Usage
 
-1. **Select Chain Mode** - Choose how many images to use and how they repeat
-2. **Select Images** - Pick your favorite Christmas shapes for each position
-3. **Choose Color Mode** - Select how colors are applied to the lights
-4. **Pick Animation** - Choose the animation effect you prefer
-5. **Adjust Speed** - Use the speed control (1-5) to change animation speed
-6. **Toggle On/Off** - Start or stop the animation
+1. **Select View Mode** - Use the dropdown in the header to switch between Settings and Demo modes
+2. **Enter Demo Message** - In Settings mode, type your custom Christmas message
+3. **Select Chain Mode** - Choose how many images to use and how they repeat
+4. **Select Images** - Pick your favorite Christmas shapes for each position
+5. **Choose Color Mode** - Select how colors are applied to the lights
+6. **Pick Animation** - Choose the animation effect you prefer
+7. **Adjust Speed** - Use the speed control (1-5) to change animation speed
+8. **Toggle On/Off** - Start or stop the animation
+9. **Switch to Demo** - View your message framed by the configured lights
 
 ## Color Scheme
 
