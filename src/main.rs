@@ -107,19 +107,20 @@ pub enum ImageShape {
 
 impl ImageShape {
     fn all() -> Vec<ImageShape> {
+        // Alphabetical order by display name
         vec![
-            ImageShape::Stocking,
-            ImageShape::XmasTree,
-            ImageShape::Snowman,
-            ImageShape::Star,
-            ImageShape::Reindeer,
-            ImageShape::Snowflake,
-            ImageShape::Lightbulb,
-            ImageShape::Icicle,
             ImageShape::CandyCane,
+            ImageShape::XmasTree,
+            ImageShape::Icicle,
+            ImageShape::Lightbulb,
             ImageShape::Ornament,
-            ImageShape::Snowman2,
+            ImageShape::Reindeer,
             ImageShape::SantaSleigh,
+            ImageShape::Snowflake,
+            ImageShape::Snowman,
+            ImageShape::Snowman2,
+            ImageShape::Star,
+            ImageShape::Stocking,
             ImageShape::Wreath,
         ]
     }
@@ -599,21 +600,21 @@ fn app() -> Html {
         SelectionMode::Random8 => 0,
     };
 
-    // Build extended chain for demo mode (32 lights: 8 top + 8 right + 8 bottom + 8 left)
+    // Build extended chain for demo mode (40 lights: 15 top + 5 right + 15 bottom + 5 left)
     let demo_chain: Vec<(ImageShape, LightColor)> = {
         let images = (*selected_images).clone();
         let all_shapes = ImageShape::all();
 
-        // Generate 32 shapes for demo mode frame
+        // Generate 40 shapes for demo mode frame
         let shapes: Vec<ImageShape> = match *selection_mode {
-            SelectionMode::Repeat1 => vec![images[0]; 32],
-            SelectionMode::Repeat2 => (0..32).map(|i| images[i % 2]).collect(),
-            SelectionMode::Repeat3 => (0..32).map(|i| images[i % 3]).collect(),
-            SelectionMode::Repeat4 => (0..32).map(|i| images[i % 4]).collect(),
-            SelectionMode::Manual8 => (0..32).map(|i| images[i % 8]).collect(),
+            SelectionMode::Repeat1 => vec![images[0]; 40],
+            SelectionMode::Repeat2 => (0..40).map(|i| images[i % 2]).collect(),
+            SelectionMode::Repeat3 => (0..40).map(|i| images[i % 3]).collect(),
+            SelectionMode::Repeat4 => (0..40).map(|i| images[i % 4]).collect(),
+            SelectionMode::Manual8 => (0..40).map(|i| images[i % 8]).collect(),
             SelectionMode::Random8 => {
                 let seed = *random_seed;
-                (0..32)
+                (0..40)
                     .map(|i| {
                         let idx = pseudo_random(seed + i * 7, all_shapes.len());
                         all_shapes[idx]
@@ -652,7 +653,7 @@ fn app() -> Html {
     html! {
         <>
             // Header with view mode toggle
-            <header class="app-header">
+            <header class={classes!("app-header", matches!(*view_mode, ViewMode::Demo).then_some("demo-mode"))}>
                 <h1 id="title">{ "Christmas Light Chain" }</h1>
                 <div class="mode-control view-toggle">
                     <label for="view-mode">{ "View:" }</label>
@@ -673,9 +674,9 @@ fn app() -> Html {
                     html! {
                         <div class="demo-container">
                             <div class="demo-frame">
-                                // Top row (8 lights)
+                                // Top row (15 lights)
                                 <div class="demo-row demo-top">
-                                    { for demo_chain.iter().take(8).enumerate().map(|(i, (shape, color))| {
+                                    { for demo_chain.iter().take(15).enumerate().map(|(i, (shape, color))| {
                                         html! {
                                             <ChainLight
                                                 shape={*shape}
@@ -691,14 +692,14 @@ fn app() -> Html {
 
                                 // Middle section with side columns and message
                                 <div class="demo-middle">
-                                    // Left column (8 lights, top to bottom)
+                                    // Left column (5 lights, top to bottom)
                                     <div class="demo-column demo-left">
-                                        { for demo_chain.iter().skip(24).take(8).enumerate().map(|(i, (shape, color))| {
+                                        { for demo_chain.iter().skip(35).take(5).enumerate().map(|(i, (shape, color))| {
                                             html! {
                                                 <ChainLight
                                                     shape={*shape}
                                                     color={*color}
-                                                    index={24 + i}
+                                                    index={35 + i}
                                                     animation_mode={*animation_mode}
                                                     speed={*speed}
                                                     is_playing={*is_playing}
@@ -713,14 +714,14 @@ fn app() -> Html {
                                         <span>{ (*christmas_message).clone() }</span>
                                     </div>
 
-                                    // Right column (8 lights, top to bottom)
+                                    // Right column (5 lights, top to bottom)
                                     <div class="demo-column demo-right">
-                                        { for demo_chain.iter().skip(8).take(8).enumerate().map(|(i, (shape, color))| {
+                                        { for demo_chain.iter().skip(15).take(5).enumerate().map(|(i, (shape, color))| {
                                             html! {
                                                 <ChainLight
                                                     shape={*shape}
                                                     color={*color}
-                                                    index={8 + i}
+                                                    index={15 + i}
                                                     animation_mode={*animation_mode}
                                                     speed={*speed}
                                                     is_playing={*is_playing}
@@ -731,14 +732,14 @@ fn app() -> Html {
                                     </div>
                                 </div>
 
-                                // Bottom row (8 lights)
+                                // Bottom row (15 lights)
                                 <div class="demo-row demo-bottom">
-                                    { for demo_chain.iter().skip(16).take(8).enumerate().map(|(i, (shape, color))| {
+                                    { for demo_chain.iter().skip(20).take(15).enumerate().map(|(i, (shape, color))| {
                                         html! {
                                             <ChainLight
                                                 shape={*shape}
                                                 color={*color}
-                                                index={16 + i}
+                                                index={20 + i}
                                                 animation_mode={*animation_mode}
                                                 speed={*speed}
                                                 is_playing={*is_playing}

@@ -2,17 +2,17 @@
 
 A Rust implementation of a customizable Christmas light chain animation using the Yew framework. Build your own festive light display with 13 unique SVG shapes, multiple color modes, and various animation effects.
 
-**[🎄 Live Demo](https://softwarewrighter.github.io/xmas-rs/?ts=1766198694963)**
+**[🎄 Live Demo](https://softwarewrighter.github.io/xmas-rs/?ts=1766245781230)**
 
 ## Screenshot
 
-![Christmas Lights Demo](./images/screenshot.png?ts=1766198694963)
+![Christmas Lights Demo](./images/screenshot.png?ts=1766245781230)
 
 ## Features
 
 ### View Modes
 - **Settings Mode** - Configure all light options and preview your chain
-- **Demo Mode** - Display a custom Christmas message framed by 32 animated lights (8 on each side)
+- **Demo Mode** - Display a custom Christmas message framed by 40 animated lights (15 top/bottom, 5 on each side)
 
 ### Light Chain Builder
 - **13 unique Christmas shapes**: Stocking, Christmas Tree, Snowman, Star, Reindeer, Snowflake, Light Bulb, Icicle, Candy Cane, Ornament, Santa's Sleigh, and Wreath
