@@ -692,14 +692,14 @@ fn app() -> Html {
 
                                 // Middle section with side columns and message
                                 <div class="demo-middle">
-                                    // Left column (5 lights, top to bottom)
+                                    // Left column (5 lights) - indices go bottom-to-top for clockwise
                                     <div class="demo-column demo-left">
                                         { for demo_chain.iter().skip(35).take(5).enumerate().map(|(i, (shape, color))| {
                                             html! {
                                                 <ChainLight
                                                     shape={*shape}
                                                     color={*color}
-                                                    index={35 + i}
+                                                    index={39 - i}
                                                     animation_mode={*animation_mode}
                                                     speed={*speed}
                                                     is_playing={*is_playing}
@@ -732,14 +732,14 @@ fn app() -> Html {
                                     </div>
                                 </div>
 
-                                // Bottom row (15 lights)
+                                // Bottom row (15 lights) - indices go right-to-left for clockwise
                                 <div class="demo-row demo-bottom">
                                     { for demo_chain.iter().skip(20).take(15).enumerate().map(|(i, (shape, color))| {
                                         html! {
                                             <ChainLight
                                                 shape={*shape}
                                                 color={*color}
-                                                index={20 + i}
+                                                index={34 - i}
                                                 animation_mode={*animation_mode}
                                                 speed={*speed}
                                                 is_playing={*is_playing}
