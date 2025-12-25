@@ -617,6 +617,13 @@ fn app() -> Html {
                     "Snowman2" => ImageShape::Snowman2,
                     "SantaSleigh" => ImageShape::SantaSleigh,
                     "Wreath" => ImageShape::Wreath,
+                    "Bells" => ImageShape::Bells,
+                    "Elf" => ImageShape::Elf,
+                    "Gift" => ImageShape::Gift,
+                    "Gift2" => ImageShape::Gift2,
+                    "Gnome" => ImageShape::Gnome,
+                    "Mistletoe" => ImageShape::Mistletoe,
+                    "IceSkate" => ImageShape::IceSkate,
                     _ => ImageShape::Stocking,
                 };
                 let mut new_images = (*selected_images).clone();
@@ -784,7 +791,6 @@ fn app() -> Html {
                                                 animation_mode={*animation_mode}
                                                 speed={*speed}
                                                 is_playing={*is_playing}
-                                                rotation={180}
                                             />
                                         }
                                     })}
