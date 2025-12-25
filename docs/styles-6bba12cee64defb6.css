@@ -703,3 +703,119 @@ select option {
     flex: 1 1 100%;
   }
 }
+
+/* Details View - Large Scrollable SVG Gallery */
+.details-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.details-title {
+  color: white;
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  font-size: 2rem;
+  margin: 0 0 2rem 0;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding-bottom: 2rem;
+}
+
+.details-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.details-name {
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.details-preview {
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.details-preview svg {
+  width: 100%;
+  height: 100%;
+  max-width: 500px;
+  max-height: 500px;
+}
+
+/* Bright glow effects matching chain-light */
+.details-item.red .details-preview {
+  filter: drop-shadow(0 0 25px #ff0000) drop-shadow(0 0 50px rgba(255, 0, 0, 0.7));
+}
+
+.details-item.green .details-preview {
+  filter: drop-shadow(0 0 25px #00cc00) drop-shadow(0 0 50px rgba(0, 204, 0, 0.7));
+}
+
+.details-item.white .details-preview {
+  filter: drop-shadow(0 0 25px #ffffff) drop-shadow(0 0 50px rgba(255, 255, 255, 0.7));
+}
+
+.details-item.yellow .details-preview {
+  filter: drop-shadow(0 0 25px #ffdd00) drop-shadow(0 0 50px rgba(255, 221, 0, 0.7));
+}
+
+.details-item.blue .details-preview {
+  filter: drop-shadow(0 0 25px #0088ff) drop-shadow(0 0 50px rgba(0, 136, 255, 0.7));
+}
+
+.details-item.purple .details-preview {
+  filter: drop-shadow(0 0 25px #aa00ff) drop-shadow(0 0 50px rgba(170, 0, 255, 0.7));
+}
+
+.details-item.orange .details-preview {
+  filter: drop-shadow(0 0 25px #ff8800) drop-shadow(0 0 50px rgba(255, 136, 0, 0.7));
+}
+
+.details-item.pink .details-preview {
+  filter: drop-shadow(0 0 25px #ff66cc) drop-shadow(0 0 50px rgba(255, 102, 204, 0.7));
+}
+
+/* Responsive adjustments for Details view */
+@media (max-width: 768px) {
+  .details-container {
+    padding: 1rem;
+  }
+
+  .details-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .details-list {
+    gap: 2rem;
+  }
+
+  .details-name {
+    font-size: 1.2rem;
+  }
+
+  .details-preview {
+    padding: 1rem;
+  }
+}

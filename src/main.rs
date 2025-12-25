@@ -21,6 +21,13 @@ const SVG_ORNAMENT: &str = include_str!("../images/ornament.svg");
 const SVG_SNOWMAN2: &str = include_str!("../images/snowman-2.svg");
 const SVG_SANTA_SLEIGH: &str = include_str!("../images/santa-sleigh.svg");
 const SVG_WREATH: &str = include_str!("../images/xmas-wreath.svg");
+const SVG_BELLS: &str = include_str!("../images/bells.svg");
+const SVG_ELF: &str = include_str!("../images/elf.svg");
+const SVG_GIFT: &str = include_str!("../images/gift.svg");
+const SVG_GIFT2: &str = include_str!("../images/gift2.svg");
+const SVG_GNOME: &str = include_str!("../images/gnome.svg");
+const SVG_MISTLETOE: &str = include_str!("../images/mistletoe.svg");
+const SVG_SKATE: &str = include_str!("../images/skate.svg");
 
 #[derive(Clone, PartialEq, Copy, Debug)]
 pub enum LightColor {
@@ -103,16 +110,30 @@ pub enum ImageShape {
     Snowman2,
     SantaSleigh,
     Wreath,
+    Bells,
+    Elf,
+    Gift,
+    Gift2,
+    Gnome,
+    Mistletoe,
+    IceSkate,
 }
 
 impl ImageShape {
     fn all() -> Vec<ImageShape> {
         // Alphabetical order by display name
         vec![
+            ImageShape::Bells,
             ImageShape::CandyCane,
             ImageShape::XmasTree,
+            ImageShape::Elf,
+            ImageShape::Gift,
+            ImageShape::Gift2,
+            ImageShape::Gnome,
+            ImageShape::IceSkate,
             ImageShape::Icicle,
             ImageShape::Lightbulb,
+            ImageShape::Mistletoe,
             ImageShape::Ornament,
             ImageShape::Reindeer,
             ImageShape::SantaSleigh,
@@ -140,6 +161,13 @@ impl ImageShape {
             ImageShape::Snowman2 => "Snowman 2",
             ImageShape::SantaSleigh => "Santa's Sleigh",
             ImageShape::Wreath => "Wreath",
+            ImageShape::Bells => "Bells",
+            ImageShape::Elf => "Elf",
+            ImageShape::Gift => "Gift",
+            ImageShape::Gift2 => "Gift 2",
+            ImageShape::Gnome => "Gnome",
+            ImageShape::Mistletoe => "Mistletoe",
+            ImageShape::IceSkate => "Ice Skate",
         }
     }
 
@@ -158,6 +186,13 @@ impl ImageShape {
             ImageShape::Snowman2 => SVG_SNOWMAN2,
             ImageShape::SantaSleigh => SVG_SANTA_SLEIGH,
             ImageShape::Wreath => SVG_WREATH,
+            ImageShape::Bells => SVG_BELLS,
+            ImageShape::Elf => SVG_ELF,
+            ImageShape::Gift => SVG_GIFT,
+            ImageShape::Gift2 => SVG_GIFT2,
+            ImageShape::Gnome => SVG_GNOME,
+            ImageShape::Mistletoe => SVG_MISTLETOE,
+            ImageShape::IceSkate => SVG_SKATE,
         }
     }
 }
@@ -233,6 +268,7 @@ impl AnimationMode {
 pub enum ViewMode {
     Settings,
     Demo,
+    Details,
 }
 
 impl ViewMode {
@@ -240,6 +276,7 @@ impl ViewMode {
         match self {
             ViewMode::Settings => "Settings",
             ViewMode::Demo => "Demo",
+            ViewMode::Details => "Details",
         }
     }
 }
@@ -422,6 +459,7 @@ fn app() -> Html {
                 let mode = match select.value().as_str() {
                     "Settings" => ViewMode::Settings,
                     "Demo" => ViewMode::Demo,
+                    "Details" => ViewMode::Details,
                     _ => ViewMode::Settings,
                 };
                 view_mode.set(mode);
@@ -664,6 +702,9 @@ fn app() -> Html {
                         <option value="Demo" selected={matches!(*view_mode, ViewMode::Demo)}>
                             { ViewMode::Demo.name() }
                         </option>
+                        <option value="Details" selected={matches!(*view_mode, ViewMode::Details)}>
+                            { ViewMode::Details.name() }
+                        </option>
                     </select>
                 </div>
             </header>
@@ -748,6 +789,31 @@ fn app() -> Html {
                                         }
                                     })}
                                 </div>
+                            </div>
+                        </div>
+                    }
+                } else if matches!(*view_mode, ViewMode::Details) {
+                    // Details mode: large scrollable previews with cycling colors
+                    let colors = LightColor::all();
+                    html! {
+                        <div class="details-container">
+                            <h2 class="details-title">{ "All Available Shapes" }</h2>
+                            <div class="details-list">
+                                { for ImageShape::all().iter().enumerate().map(|(i, shape)| {
+                                    let color = colors[i % colors.len()];
+                                    // Apply color to SVG like ChainLight does
+                                    let colored_svg = shape.svg_content()
+                                        .replace("fill=\"#000000\"", &format!("fill=\"{}\"", color.as_rgb()))
+                                        .replace("fill:#000000", &format!("fill:{}", color.as_rgb()));
+                                    html! {
+                                        <div class={classes!("details-item", color.as_class())}>
+                                            <div class="details-name">{ shape.name() }</div>
+                                            <div class="details-preview">
+                                                { Html::from_html_unchecked(colored_svg.into()) }
+                                            </div>
+                                        </div>
+                                    }
+                                })}
                             </div>
                         </div>
                     }
