@@ -1,21 +1,22 @@
 # Christmas Light Chain - Rust/Yew Implementation
 
-A Rust implementation of a customizable Christmas light chain animation using the Yew framework. Build your own festive light display with 13 unique SVG shapes, multiple color modes, and various animation effects.
+A Rust implementation of a customizable Christmas light chain animation using the Yew framework. Build your own festive light display with 20 unique SVG shapes, multiple color modes, and various animation effects.
 
-**[🎄 Live Demo](https://softwarewrighter.github.io/xmas-rs/?ts=1766245781230)**
+**[🎄 Live Demo](https://softwarewrighter.github.io/xmas-rs/?ts=1766708169314)**
 
 ## Screenshot
 
-![Christmas Lights Demo](./images/screenshot.png?ts=1766245781230)
+![Christmas Lights Demo](./images/screenshot.png?ts=1766708169314)
 
 ## Features
 
 ### View Modes
 - **Settings Mode** - Configure all light options and preview your chain
 - **Demo Mode** - Display a custom Christmas message framed by 40 animated lights (15 top/bottom, 5 on each side)
+- **Details Mode** - View all available shapes and their names in a grid layout
 
 ### Light Chain Builder
-- **13 unique Christmas shapes**: Stocking, Christmas Tree, Snowman, Star, Reindeer, Snowflake, Light Bulb, Icicle, Candy Cane, Ornament, Santa's Sleigh, and Wreath
+- **20 unique Christmas shapes**: Stocking, Christmas Tree, Snowman, Star, Reindeer, Snowflake, Light Bulb, Icicle, Candy Cane, Ornament, Snowman 2, Santa's Sleigh, Wreath, Bells, Elf, Gift, Gift 2, Gnome, Mistletoe, and Ice Skate
 - **Chain selection modes**:
   - 1 Image (Repeat) - Single image repeated 8 times
   - 2 Images (Alternate) - Two images alternating
@@ -127,7 +128,7 @@ The lights use an expanded festive color palette:
 - `src/main.rs` - Main Yew component and application logic
 - `index.html` - HTML template
 - `styles.css` - CSS styles and animations
-- `images/` - SVG Christmas shapes (13 images)
+- `images/` - SVG Christmas shapes (20 images)
 - `svg/` - Legacy SVG templates
 - `scripts/` - Build and development scripts
 - `Cargo.toml` - Rust dependencies
