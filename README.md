@@ -6,7 +6,7 @@ A Rust implementation of a customizable Christmas light chain animation using th
 
 ## Screenshot
 
-![Christmas Lights Demo](./images/screenshot.png?ts=1766708169314)
+![Christmas Lights Demo](./images/screenshot.png?v=2&ts=1766708169314)
 
 ## Features
 
